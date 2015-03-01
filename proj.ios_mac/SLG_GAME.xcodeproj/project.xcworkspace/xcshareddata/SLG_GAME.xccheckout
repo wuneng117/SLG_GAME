@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>02E931D1-2751-4B0A-A348-8D0D6D1686B3</string>
+	<key>IDESourceControlProjectName</key>
+	<string>SLG_GAME</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>24F77C7143FF77AAEA28241B104E3256F4C07F02</key>
+		<string>https://github.com/wuneng117/SLG_GAME.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>tools/cocos2d-console/bin/SLG_GAME/proj.ios_mac/SLG_GAME.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>24F77C7143FF77AAEA28241B104E3256F4C07F02</key>
+		<string>../../../../../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/wuneng117/SLG_GAME.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>24F77C7143FF77AAEA28241B104E3256F4C07F02</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>24F77C7143FF77AAEA28241B104E3256F4C07F02</string>
+			<key>IDESourceControlWCCName</key>
+			<string>cocos2d-x-3.4</string>
+		</dict>
+	</array>
+</dict>
+</plist>
