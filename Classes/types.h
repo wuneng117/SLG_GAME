@@ -10,6 +10,8 @@
 #define testproject_types_h
 
 #include <iostream>
+#include <string>
+
 #define BIT(x) (1 << (x))                       ///< Returns value with bit x set (2^x)
 
 typedef unsigned int U32;
@@ -63,5 +65,9 @@ const char* const HeroClass[] =
     "正义的青年",
     "天然呆"
 };
+
+class city;
+typedef std::map<U32,city*> CITY_MAP;
+typedef CITY_MAP::iterator  CITY_MAPITR;
 
 #endif

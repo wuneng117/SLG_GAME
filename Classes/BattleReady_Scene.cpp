@@ -11,7 +11,6 @@
 #include "Player.h"
 #include "GameClientManager.h"
 #include "SkillData.h"
-#include "GraySprite.h"
 
 USING_NS_CC;
 USING_NS_TIMELINE;
@@ -56,17 +55,17 @@ bool BattleReady_Scene::init()
     //
     //-------------------------------------cocostudio读取-----------------------------------------------------------------
     //
-    Node* rootNode = CSLoader::createNode("BattleReady_Scene.csb");
-    addChild(rootNode);
+    m_root = CSLoader::createNode("BattleReady_Scene.csb");
+    addChild(m_root);
     
     
-    m_unitList = dynamic_cast<PageView*>(rootNode->getChildByName("PageView_UnitList"));    // 角色列表
+    m_unitList = dynamic_cast<PageView*>(m_root->getChildByName("PageView_UnitList"));    // 角色列表
     m_unitList->addEventListener(CC_CALLBACK_2(BattleReady_Scene::onListTurnEvent,this));
     updateUnitList(g_gameClientManager->m_player.m_heroMap);
     
-    m_unit = dynamic_cast<Layout*>(rootNode->getChildByName("Panel_Unit"));     // 角色信息
+    m_unit = dynamic_cast<Layout*>(m_root->getChildByName("Panel_Unit"));     // 角色信息
     dynamic_cast<Button*>(m_unit->getChildByName("detal"))->addTouchEventListener(CC_CALLBACK_2(BattleReady_Scene::onUnitDetalTouchEvent,this));
-    //dynamic_cast<ImageView*>(m_unit->getChildByName("fg"))->loadTexture("100x100_side_move.png");
+    //dynamic_cast<ImageView*>(m_unit->getChildByName("fg"))->setVisible(false);
     dynamic_cast<Text*>(m_unit->getChildByName("name"))->setString("------------");
     dynamic_cast<Text*>(m_unit->getChildByName("lv"))->setString("Lv:--");
     dynamic_cast<Text*>(m_unit->getChildByName("hp"))->setString("HP ----/----");
@@ -79,7 +78,7 @@ bool BattleReady_Scene::init()
     dynamic_cast<Text*>(m_unit->getChildByName("hit"))->setString("命中:------");
     dynamic_cast<Text*>(m_unit->getChildByName("move"))->setString("移动:------");
     
-    m_unitTeam = dynamic_cast<Layout*>(rootNode->getChildByName("Panel_UnitTeam"));     // 角色队伍
+    m_unitTeam = dynamic_cast<Layout*>(m_root->getChildByName("Panel_UnitTeam"));     // 角色队伍
     dynamic_cast<Button*>(m_unitTeam->getChildByName("start"))->addTouchEventListener(CC_CALLBACK_2(BattleReady_Scene::onStartTouchEvent, this));
     
     for (int i=0; i<6; i++) {
@@ -102,15 +101,16 @@ bool BattleReady_Scene::init()
 
     }
     
+    m_unitDetalBg = dynamic_cast<Layout*>(m_root->getChildByName("Panel_UnitBg"));
+    m_unitDetalBg->addTouchEventListener(CC_CALLBACK_2(BattleReady_Scene::onUnitPanelTouchEvent, this));
+    m_unitDetalBg->setVisible(false);
     
-//    //角色数据
-//    panel_myUnit = dynamic_cast<Layout*>(rootNode->getChildByName("Panel_myUnit"));
-//    panel_enermyUnit = dynamic_cast<Layout*>(rootNode->getChildByName("Panel_enermyUnit"));
-//    panel_enermyUnit->setVisible(false);
-//    panel_myUnit->setVisible(false);
+    m_unitDetal = dynamic_cast<PageView*>(m_unitDetalBg->getChildByName("PageView_Unit"));     // 角色详细信息
+    dynamic_cast<Button*>(m_unitDetal->getChildByName("Panel_1")->getChildByName("skill"))->addTouchEventListener(CC_CALLBACK_2(BattleReady_Scene::onSkillBtnTouchEvent,this));
 
-    
-    
+    m_unitSkill = dynamic_cast<Layout*>(m_root->getChildByName("Panel_SkillBg"));     // 角色技能
+    m_unitSkill->addTouchEventListener(CC_CALLBACK_2(BattleReady_Scene::onSkillPanelTouchEvent, this));
+    m_unitSkill->setVisible(false);
     
     return true;
 }
@@ -119,7 +119,15 @@ void BattleReady_Scene::updateUnitList(Player::HERO_MAP& heroMap)
 {
     m_unitList->removeAllPages();
     
-    int max_page = heroMap.size()/PAGE_NUM + 1;
+    unsigned long max_page = heroMap.size()/PAGE_NUM + 1;
+    
+    m_root->getChildByName("Image_ArrowL")->setVisible(false);
+    if (max_page>1) {
+        m_root->getChildByName("Image_ArrowR")->setVisible(true);
+    }
+    else {
+        m_root->getChildByName("Image_ArrowR")->setVisible(false);
+    }
     
     Player::HERO_MAPITR it = heroMap.begin();
     
@@ -142,11 +150,11 @@ void BattleReady_Scene::updateUnitList(Player::HERO_MAP& heroMap)
             
             dynamic_cast<Widget*>(unit_bg->getChildByName("cover"))->setVisible(false);
             dynamic_cast<Widget*>(unit_bg->getChildByName("select"))->setVisible(false);
-
+            
             
             HeroRef hero = it->second;
             HeroData* data = HeroManager::getInstance()->getHeroData(hero->id);
-
+            
             dynamic_cast<Text*>(unit_bg->getChildByName("name"))->setString(data->m_name);
             
             std::stringstream str;
@@ -172,7 +180,7 @@ void BattleReady_Scene::showUnit(HeroRef hero)
     HeroData* data = HeroManager::getInstance()->getHeroData(hero->id);
     assert(data);
     
-    //dynamic_cast<ImageView*>(m_unit->getChildByName("fg"))->loadTexture("100x100_side_move.png");
+    //dynamic_cast<ImageView*>(m_unit->getChildByName("fg"))->loadTexture(data->m_icon);
     dynamic_cast<Text*>(m_unit->getChildByName("name"))->setString(data->m_name);
     
     std::stringstream str;
@@ -217,6 +225,147 @@ void BattleReady_Scene::showUnit(HeroRef hero)
     str.str("");
     str<<"移动:"<<status.MOV;
     dynamic_cast<Text*>(m_unit->getChildByName("move"))->setString(str.str());
+    
+    //-----------------------------详细界面---------------------------------------
+    //第一页
+    Layout* panel_1 = m_unitDetal->getPage(0);
+    //dynamic_cast<ImageView*>(panel_1->getChildByName("fg"))->loadTexture("100x100_side_move.png");
+    dynamic_cast<Text*>(panel_1->getChildByName("name"))->setString(data->m_name);
+    
+    str<<"Lv:"<<hero->m_level;
+    dynamic_cast<Text*>(panel_1->getChildByName("lv"))->setString(str.str());
+    
+    str.str("");
+    str<<"HP "<<status.HP<<"/"<<status.MaxHP;
+    dynamic_cast<Text*>(panel_1->getChildByName("hp"))->setString(str.str());
+    
+    
+    str.str("");
+    str<<"MP "<<status.MP<<"/"<<status.MaxMP;
+    dynamic_cast<Text*>(panel_1->getChildByName("mp"))->setString(str.str());
+    
+    str.str("");
+    str<<"职业:"<<HeroClass[data->m_class1]<<" "<<HeroClass[data->m_class2];
+    dynamic_cast<Text*>(panel_1->getChildByName("class"))->setString(str.str());
+    
+    str.str("");
+    str<<"格斗:"<<status.ATKS;
+    dynamic_cast<Text*>(panel_1->getChildByName("atk_s"))->setString(str.str());
+    
+    str.str("");
+    str<<"射击:"<<status.ATKL;
+    dynamic_cast<Text*>(panel_1->getChildByName("atk_l"))->setString(str.str());
+    
+    str.str("");
+    str<<"防御:"<<status.DEF;
+    dynamic_cast<Text*>(panel_1->getChildByName("def"))->setString(str.str());
+    
+    str.str("");
+    str<<"回避:"<<status.Dodge;
+    dynamic_cast<Text*>(panel_1->getChildByName("dodge"))->setString(str.str());
+    
+    str.str("");
+    str<<"命中:"<<status.Hit;
+    dynamic_cast<Text*>(panel_1->getChildByName("hit"))->setString(str.str());
+    
+    str.str("");
+    str<<"移动:"<<status.MOV;
+    dynamic_cast<Text*>(panel_1->getChildByName("move"))->setString(str.str());
+    
+    str.str("");
+    str<<"探索:"<<data->m_search;
+    dynamic_cast<Text*>(panel_1->getChildByName("search"))->setString(str.str());
+    
+    str.str("");
+    str<<"挖矿:"<<data->m_mining;
+    dynamic_cast<Text*>(panel_1->getChildByName("mining"))->setString(str.str());
+    
+    str.str("");
+    str<<"农牧:"<<data->m_farm;
+    dynamic_cast<Text*>(panel_1->getChildByName("farm"))->setString(str.str());
+    
+    str.str("");
+    str<<"土木:"<<data->m_tree;
+    dynamic_cast<Text*>(panel_1->getChildByName("tree"))->setString(str.str());
+    
+    str.str("");
+    str<<"炼金:"<<data->m_alchemy;
+    dynamic_cast<Text*>(panel_1->getChildByName("alchemy"))->setString(str.str());
+    
+    str.str("");
+    str<<"合成:"<<data->m_item;
+    dynamic_cast<Text*>(panel_1->getChildByName("item"))->setString(str.str());
+    str.str("");
+    str<<"锻造:"<<data->m_weapon;
+    dynamic_cast<Text*>(panel_1->getChildByName("weapon"))->setString(str.str());
+    
+    str.str("");
+    str<<"铸甲:"<<data->m_armor;
+    dynamic_cast<Text*>(panel_1->getChildByName("armor"))->setString(str.str());
+    
+    str.str("");
+    str<<"管理:"<<data->m_manage;
+    dynamic_cast<Text*>(panel_1->getChildByName("manage"))->setString(str.str());
+    
+    str.str("");
+    str<<"交涉:"<<data->m_communication;
+    dynamic_cast<Text*>(panel_1->getChildByName("communication"))->setString(str.str());
+    
+    str.str("");
+    str<<"珠宝:"<<data->m_charm;
+    dynamic_cast<Text*>(panel_1->getChildByName("charm"))->setString(str.str());
+    
+    str.str("");
+    str<<"家政:"<<data->m_home;
+    dynamic_cast<Text*>(panel_1->getChildByName("home"))->setString(str.str());
+    
+    //第二页
+    Layout* panel_2 = m_unitDetal->getPage(1);
+    
+    dynamic_cast<Text*>(panel_2->getChildByName("name"))->setString(data->m_name);
+    
+    //第三页
+    Layout* panel_3 = m_unitDetal->getPage(2);
+    
+    dynamic_cast<Text*>(panel_3->getChildByName("name"))->setString(data->m_name);
+    dynamic_cast<Text*>(panel_3->getChildByName("des"))->setString(data->m_des);
+    
+    //技能界面
+    for (int i=0; i<3; i++) {
+        showSkill(m_unitSkill->getChildren().at(0)->getChildByTag(i+1), data->m_attackSkill[i]);
+    }
+}
+
+void BattleReady_Scene::showSkill(Node* node, U32 skillId)
+{
+    if (skillId) {
+        SkillData* skilldata = SkillManager::getInstance()->getSkillData(skillId);
+        assert(skilldata);
+        
+        node->setVisible(true);
+        
+        std::stringstream str;
+        str<<skilldata->m_range_s<<"-"<<skilldata->m_range_l;
+        dynamic_cast<Text*>(node->getChildByName("range"))->setString(str.str());
+        
+        str.str("");
+        str<<skilldata->m_damage;
+        dynamic_cast<Text*>(node->getChildByName("damage"))->setString(str.str());
+        
+        str.str("");
+        str<<skilldata->m_cost.time;
+        dynamic_cast<Text*>(node->getChildByName("time"))->setString(str.str());
+        
+        str.str("");
+        str<<skilldata->m_cost.MP;
+        dynamic_cast<Text*>(node->getChildByName("cost"))->setString(str.str());
+        
+        dynamic_cast<Text*>(node->getChildByName("name"))->setString(skilldata->m_name);
+        dynamic_cast<Text*>(node->getChildByName("des"))->setString("说明:"+skilldata->m_des);
+    }
+    else{
+        node->setVisible(false);
+    }
 }
 
 void BattleReady_Scene::onListTurnEvent(cocos2d::Ref *obj, cocos2d::ui::PageView::EventType event)
@@ -324,11 +473,8 @@ void BattleReady_Scene::onUnitDetalTouchEvent(cocos2d::Ref* ref, cocos2d::ui::Wi
 {
     if(type != Widget::TouchEventType::ENDED)
         return;
-    
-    int tag = dynamic_cast<Node*>(ref)->getTag();
-    
-    CCLOG("onUnitDetalTouchEvent:%d",tag);
-    
+
+    m_unitDetalBg->setVisible(true);
 }
 
 void BattleReady_Scene::onStartTouchEvent(cocos2d::Ref* ref, cocos2d::ui::Widget::TouchEventType type)
@@ -354,7 +500,45 @@ void BattleReady_Scene::onStartTouchEvent(cocos2d::Ref* ref, cocos2d::ui::Widget
     Director::getInstance()->replaceScene(scene);
 }
 
+void BattleReady_Scene::onSkillBtnTouchEvent(cocos2d::Ref* ref, cocos2d::ui::Widget::TouchEventType type)
+{
+    if(type != Widget::TouchEventType::ENDED)
+        return;
+    
+    m_unitSkill->setVisible(true);
+}
 
+void BattleReady_Scene::onSkillPanelTouchEvent(cocos2d::Ref* ref, cocos2d::ui::Widget::TouchEventType type)
+{
+    if(type != Widget::TouchEventType::ENDED)
+        return;
+    
+    Widget* widget = dynamic_cast<Widget*>(ref);
+    
+    Point point = widget->getTouchEndPosition();
+    if(!widget->getChildByName("Panel_Skill")->getBoundingBox().containsPoint(point))
+        widget->setVisible(false);
+}
+
+void BattleReady_Scene::onUnitPanelTouchEvent(cocos2d::Ref* ref, cocos2d::ui::Widget::TouchEventType type)
+{
+    if(type != Widget::TouchEventType::ENDED)
+        return;
+    
+    Widget* widget = dynamic_cast<Widget*>(ref);
+    
+    Point point = widget->getTouchEndPosition();
+    if(!widget->getChildByName("PageView_Unit")->getBoundingBox().containsPoint(point))
+        widget->setVisible(false);
+}
+
+void BattleReady_Scene::onReturnTouchEvent(cocos2d::Ref* ref, cocos2d::ui::Widget::TouchEventType type)
+{
+    if(type != Widget::TouchEventType::ENDED)
+        return;
+    
+    Director::getInstance()->popScene();
+}
 
 bool BattleReady_Scene::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event)
 {

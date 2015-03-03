@@ -60,6 +60,9 @@
 		521A8EAA19F11F5000D177D7 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = 521A8EA819F11F5000D177D7 /* fonts */; };
 		52B47A471A53D09C004E4C60 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52B47A461A53D09B004E4C60 /* Security.framework */; };
 		798761991A99DC5A0054A171 /* MapMain_Scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 798761971A99DC5A0054A171 /* MapMain_Scene.cpp */; };
+		79AECB3F1AA45CD8006EE9BD /* Team_Scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 79AECB3D1AA45CD8006EE9BD /* Team_Scene.cpp */; };
+		79C8AF8E1AA5639100A2F764 /* 100x100_side_def.png in Resources */ = {isa = PBXBuildFile; fileRef = 79C8AF8C1AA5639100A2F764 /* 100x100_side_def.png */; };
+		79C8AF8F1AA5639100A2F764 /* 100x100_side_move.png in Resources */ = {isa = PBXBuildFile; fileRef = 79C8AF8D1AA5639100A2F764 /* 100x100_side_move.png */; };
 		79D019591A999167002ED961 /* BattleReady_Scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 79D019571A999167002ED961 /* BattleReady_Scene.cpp */; };
 		79D0195D1A99919C002ED961 /* GraySprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 79D0195B1A99919C002ED961 /* GraySprite.cpp */; };
 		79D019691A99924F002ED961 /* BuffData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 79D0195F1A99924F002ED961 /* BuffData.cpp */; };
@@ -168,6 +171,10 @@
 		52B47A461A53D09B004E4C60 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.1.sdk/System/Library/Frameworks/Security.framework; sourceTree = DEVELOPER_DIR; };
 		798761971A99DC5A0054A171 /* MapMain_Scene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MapMain_Scene.cpp; sourceTree = "<group>"; };
 		798761981A99DC5A0054A171 /* MapMain_Scene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapMain_Scene.h; sourceTree = "<group>"; };
+		79AECB3D1AA45CD8006EE9BD /* Team_Scene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Team_Scene.cpp; sourceTree = "<group>"; };
+		79AECB3E1AA45CD8006EE9BD /* Team_Scene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Team_Scene.h; sourceTree = "<group>"; };
+		79C8AF8C1AA5639100A2F764 /* 100x100_side_def.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 100x100_side_def.png; sourceTree = "<group>"; };
+		79C8AF8D1AA5639100A2F764 /* 100x100_side_move.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 100x100_side_move.png; sourceTree = "<group>"; };
 		79D019571A999167002ED961 /* BattleReady_Scene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BattleReady_Scene.cpp; sourceTree = "<group>"; };
 		79D019581A999167002ED961 /* BattleReady_Scene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BattleReady_Scene.h; sourceTree = "<group>"; };
 		79D0195B1A99919C002ED961 /* GraySprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GraySprite.cpp; sourceTree = "<group>"; };
@@ -317,6 +324,8 @@
 		46880B7519C43A67006E1F66 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				79C8AF8C1AA5639100A2F764 /* 100x100_side_def.png */,
+				79C8AF8D1AA5639100A2F764 /* 100x100_side_move.png */,
 				79D0197F1A99945E002ED961 /* HeroData.csv */,
 				79D019801A99945E002ED961 /* SkillData.csv */,
 				79D019811A99945E002ED961 /* StatusData.csv */,
@@ -408,6 +417,8 @@
 				79D019581A999167002ED961 /* BattleReady_Scene.h */,
 				798761971A99DC5A0054A171 /* MapMain_Scene.cpp */,
 				798761981A99DC5A0054A171 /* MapMain_Scene.h */,
+				79AECB3D1AA45CD8006EE9BD /* Team_Scene.cpp */,
+				79AECB3E1AA45CD8006EE9BD /* Team_Scene.h */,
 			);
 			name = GUI;
 			sourceTree = "<group>";
@@ -562,8 +573,10 @@
 				521A8EA919F11F5000D177D7 /* fonts in Resources */,
 				50EF62A317ECD613001EB2F8 /* Icon-50.png in Resources */,
 				5087E78017EB970100C73F5D /* Icon-114.png in Resources */,
+				79C8AF8E1AA5639100A2F764 /* 100x100_side_def.png in Resources */,
 				50EF62A217ECD613001EB2F8 /* Icon-29.png in Resources */,
 				50EF629617ECD46A001EB2F8 /* Icon-40.png in Resources */,
+				79C8AF8F1AA5639100A2F764 /* 100x100_side_move.png in Resources */,
 				5087E78217EB970100C73F5D /* Icon-144.png in Resources */,
 				3EACC98F19EE6D4300EB3C5E /* res in Resources */,
 				50EF629817ECD46A001EB2F8 /* Icon-80.png in Resources */,
@@ -614,6 +627,7 @@
 				79D0197B1A99929A002ED961 /* ctest.cpp in Sources */,
 				503AE10117EB989F00D1A890 /* main.m in Sources */,
 				79D019771A999284002ED961 /* Player.cpp in Sources */,
+				79AECB3F1AA45CD8006EE9BD /* Team_Scene.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

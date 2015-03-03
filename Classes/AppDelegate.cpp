@@ -5,6 +5,7 @@
 #include "SkillData.h"
 #include "BattleReady_Scene.h"
 #include "MapMain_Scene.h"
+#include "Team_Scene.h"
 
 USING_NS_CC;
 
@@ -44,6 +45,9 @@ bool AppDelegate::applicationDidFinishLaunching() {
     
     //add search
     FileUtils::getInstance()->addSearchPath("res/");
+    FileUtils::getInstance()->addSearchPath("res/icon/");
+    FileUtils::getInstance()->addSearchPath("res/scene/");
+    FileUtils::getInstance()->addSearchPath("res/effect");
     FileUtils::getInstance()->addSearchPath("fg/");
     
     StatusManager::getInstance()->read();   //读取status
@@ -68,7 +72,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     //auto scene = HelloWorld::createScene();
     
     auto scene = BattleReady_Scene::createScene();
-
+    //auto scene = Team_Scene::createScene();
     //auto scene = MapMain_Scene::createScene();
     // run
     director->runWithScene(scene);

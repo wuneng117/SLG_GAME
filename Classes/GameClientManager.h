@@ -34,9 +34,12 @@ public:
     bool readSaveData();    //读取存档
     
 
-    PLAYER_MAP m_playerMap;
-    Player m_player;
+    PLAYER_MAP m_playerMap; // 所有玩家
+    CITY_MAP   m_cityMap;   // 城市
     
+    Player m_player;    //
+    
+    U32 m_turn;     //当前回合
 };
 extern GameClientManager* g_gameClientManager;
 

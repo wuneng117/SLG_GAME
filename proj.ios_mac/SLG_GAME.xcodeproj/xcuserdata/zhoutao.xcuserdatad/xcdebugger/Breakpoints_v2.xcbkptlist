@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Classes/HelloWorldScene.cpp"
-            timestampString = "446543415.499314"
+            timestampString = "447043179.550435"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1234"
-            endingLineNumber = "1234"
+            startingLineNumber = "1235"
+            endingLineNumber = "1235"
             landmarkName = "HelloWorld::onTouchEnded(Touch* touch, cocos2d::Event *event)"
             landmarkType = "5">
          </BreakpointContent>

@@ -483,6 +483,7 @@ void HelloWorld::showSkill(Node* node, U32 skillId)
         node->setVisible(false);
     }
 }
+
 void HelloWorld::showActionMenu(Point pos, bool bMoved /*=true*/)
 {
     actionMenu->setVisible(true);
